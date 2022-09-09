@@ -6,23 +6,26 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 4000:4000
     depends_on:
-      - postgres
+      - mysql
     env_file:
       - .env
 
-  postgres:
-    image: postgres:13
-    container_name: postgres
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: na-auth-service
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
     ports:
-      - 5432:5432
+      - 3307:3307
     env_file:
       - .env
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - /opt/mysql_data:/var/lib/mysql
 
 volumes:
-  postgres:
+  mysql:
     name: nest-db
